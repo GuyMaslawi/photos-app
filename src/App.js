@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import GlobalStyle from "./GlobalStyle";
+import {Content} from "./AppStyle";
+import {fetchAllPhotos} from "./store/photosSlice";
+import {Header, Loader, ListOfImages} from "./components";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const dispatch = useDispatch();
+    const isLoading = useSelector(state => state.photos.loading);
+
+    useEffect(() => {
+        dispatch(fetchAllPhotos());
+    }, [dispatch]);
+
+    return (
+        <div>
+            <GlobalStyle/>
+            <Header title="Photos"/>
+            <Content>
+                {isLoading ? <Loader/> : <ListOfImages/>}
+            </Content>
+        </div>
+    );
+};
 
 export default App;
